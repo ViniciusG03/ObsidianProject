@@ -22,7 +22,7 @@ public final class Lobby extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Lobby iniciado com sucesso!");
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new TitlePacket(), this);
         Bukkit.getPluginManager().registerEvents(new RankListener(this), this);
 

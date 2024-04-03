@@ -1,6 +1,7 @@
 package com.menosprezo.lobby.listener;
 
 import com.menosprezo.lobby.Lobby;
+import com.menosprezo.lobby.commands.rank.Rank;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,6 +35,10 @@ public class ScoreBoard implements Listener {
         board.updateTitle("§5§lOBSIDIAN");
 
         this.boards.put(player.getUniqueId(), board);
+
+        if(!player.hasPlayedBefore()) {
+            addTeam(player, "MEMBRO", board);
+        }
     }
 
     @EventHandler
@@ -54,11 +59,11 @@ public class ScoreBoard implements Listener {
 
     public void updateBoard(FastBoard board) {
         Player player = board.getPlayer();
-        String rankDisplay = lobby.getRankManager().getRank(player.getUniqueId()).getDisplay();
+        Rank rank = lobby.getRankManager().getRank(player.getUniqueId());
 
         board.updateLines(
                 "",
-                "§fRank: " + rankDisplay,
+                "§fRank: " + rank.getDisplay(),
                 "",
                 "§fLobby: §7#1",
                 "§fJogadores: §5" + lobby.getServer().getOnlinePlayers().size(),
@@ -68,10 +73,10 @@ public class ScoreBoard implements Listener {
 
         Team team = player.getScoreboard().getEntryTeam(player.getName());
         if (team != null) {
-            if (rankDisplay.equals("§4§lDONO§4")) {
+            if (rank == Rank.DONO) {
                 team.setPrefix("§4§lDONO§4 ");
                 team.setDisplayName("§4§lDONO§4 ");
-            } else if (rankDisplay.equals("§4§lADMIN§4")) {
+            } else if (rank == Rank.ADMIN) {
                 team.setPrefix("§4§lADMIN§4 ");
                 team.setDisplayName("§4§lADMIN§4 ");
             } else {
@@ -83,13 +88,14 @@ public class ScoreBoard implements Listener {
 
     public void addTeam (Player player, String teamName, FastBoard board) {
         Team team = board.getPlayer().getScoreboard().getTeam(teamName);
+        Rank rank = lobby.getRankManager().getRank(player.getUniqueId());
 
         if (team == null) {
-            if (lobby.getRankManager().getRank(player.getUniqueId()).getDisplay() == "§4§lDONO§4") {
+            if (rank == Rank.DONO) {
                 team = board.getPlayer().getScoreboard().registerNewTeam(teamName);
                 team.setPrefix("§4§lDONO§4 ");
                 team.setDisplayName("§4§lDONO§4 ");
-            } else if (lobby.getRankManager().getRank(player.getUniqueId()).getDisplay() == "§4§lADMIN§4") {
+            } else if (rank == Rank.ADMIN) {
                 team = board.getPlayer().getScoreboard().registerNewTeam(teamName);
                 team.setPrefix("§4§lADMIN§4 ");
                 team.setDisplayName("§4§lADMIN§4 ");
