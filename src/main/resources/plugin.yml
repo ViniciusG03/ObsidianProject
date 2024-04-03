@@ -1,0 +1,8 @@
+name: lobby
+version: '${1.0}'
+main: com.menosprezo.lobby.Lobby
+authors: [ Menosprezo ]
+description: Lobby Plugin
+commands:
+  rank:
+
