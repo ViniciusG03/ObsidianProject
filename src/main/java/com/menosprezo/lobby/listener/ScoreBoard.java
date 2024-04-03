@@ -34,6 +34,10 @@ public class ScoreBoard implements Listener {
         board.updateTitle("§5§lOBSIDIAN");
 
         this.boards.put(player.getUniqueId(), board);
+
+        if(!player.hasPlayedBefore()) {
+            addTeam(player, "MEMBRO", board);
+        }
     }
 
     @EventHandler
@@ -85,11 +89,11 @@ public class ScoreBoard implements Listener {
         Team team = board.getPlayer().getScoreboard().getTeam(teamName);
 
         if (team == null) {
-            if (lobby.getRankManager().getRank(player.getUniqueId()).getDisplay() == "§4§lDONO§4") {
+            if (lobby.getRankManager().getRank(player.getUniqueId()).getDisplay().equalsIgnoreCase("§4§lDONO§4")) {
                 team = board.getPlayer().getScoreboard().registerNewTeam(teamName);
                 team.setPrefix("§4§lDONO§4 ");
                 team.setDisplayName("§4§lDONO§4 ");
-            } else if (lobby.getRankManager().getRank(player.getUniqueId()).getDisplay() == "§4§lADMIN§4") {
+            } else if (lobby.getRankManager().getRank(player.getUniqueId()).getDisplay().equalsIgnoreCase("§4§lADMIN§4")) {
                 team = board.getPlayer().getScoreboard().registerNewTeam(teamName);
                 team.setPrefix("§4§lADMIN§4 ");
                 team.setDisplayName("§4§lADMIN§4 ");
