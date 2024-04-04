@@ -48,4 +48,21 @@ public class ManagerDB {
             return false;
         }
     }
+
+    public void DeletePlayer(String uuid) {
+        Connection conn;
+        PreparedStatement pstm;
+
+        String sql = "DELETE FROM obisidian_players where player_uuid = ?";
+        conn = ConnectionDB.getConexaoMySQL();
+
+        try {
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, uuid);
+            pstm.execute();
+        } catch (SQLException e) {
+            System.out.println("Não foi possível remover o jogador do Banco de Dados");
+            e.printStackTrace();
+        }
+    }
 }

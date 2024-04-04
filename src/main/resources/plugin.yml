@@ -5,4 +5,9 @@ authors: [ Menosprezo ]
 description: Lobby Plugin
 commands:
   rank:
+  build:
+  gm:
+permissions:
+  lobby.build:
+    default: op
 

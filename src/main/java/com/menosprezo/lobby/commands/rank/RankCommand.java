@@ -2,14 +2,12 @@ package com.menosprezo.lobby.commands.rank;
 
 import com.menosprezo.lobby.Lobby;
 import com.menosprezo.lobby.listener.ScoreBoard;
-import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -39,35 +37,35 @@ public class RankCommand implements CommandExecutor {
                         for (Rank rank : Rank.values()) {
                             if (rank.name().equalsIgnoreCase(args[1])) {
                                 if (args[1].equalsIgnoreCase("dono") || args[1].equalsIgnoreCase("DONO")) {
-                                    Scoreboard board = player.getScoreboard();
-                                    Team team = board.getEntryTeam(player.getName());
+                                    Scoreboard board = target.getPlayer().getScoreboard();
+                                    Team team = board.getEntryTeam(target.getName());
 
                                     if (team != null) {
-                                        team.removeEntry(player.getName());
+                                        team.removeEntry(target.getName());
                                     }
 
-                                    scoreBoard.addTeam(player, "DONO", scoreBoard.boards.get(player.getUniqueId()));
-                                    scoreBoard.updateBoard(scoreBoard.boards.get(player.getUniqueId()));
+                                    scoreBoard.addTeam(target.getPlayer(), "DONO", scoreBoard.boards.get(target.getUniqueId()));
+                                    scoreBoard.updateBoard(scoreBoard.boards.get(target.getUniqueId()));
                                 } else if (args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("ADMIN")) {
-                                    Scoreboard board = player.getScoreboard();
-                                    Team team = board.getEntryTeam(player.getName());
+                                    Scoreboard board = target.getPlayer().getScoreboard();
+                                    Team team = board.getEntryTeam(target.getName());
 
                                     if (team != null) {
-                                        team.removeEntry(player.getName());
+                                        team.removeEntry(target.getPlayer().getName());
                                     }
 
-                                    scoreBoard.addTeam(player, "ADMIN", scoreBoard.boards.get(player.getUniqueId()));
-                                    scoreBoard.updateBoard(scoreBoard.boards.get(player.getUniqueId()));
+                                    scoreBoard.addTeam(target.getPlayer(), "ADMIN", scoreBoard.boards.get(target.getUniqueId()));
+                                    scoreBoard.updateBoard(scoreBoard.boards.get(target.getUniqueId()));
                                 } else if (args[1].equalsIgnoreCase("membro") || args[1].equalsIgnoreCase("MEMBRO")) {
-                                    Scoreboard board = player.getScoreboard();
-                                    Team team = board.getEntryTeam(player.getName());
+                                    Scoreboard board = target.getPlayer().getScoreboard();
+                                    Team team = board.getEntryTeam(target.getName());
 
                                     if (team != null) {
-                                        team.removeEntry(player.getName());
+                                        team.removeEntry(target.getName());
                                     }
 
-                                    scoreBoard.addTeam(player, "MEMBRO", scoreBoard.boards.get(player.getUniqueId()));
-                                    scoreBoard.updateBoard(scoreBoard.boards.get(player.getUniqueId()));
+                                    scoreBoard.addTeam(target.getPlayer(), "MEMBRO", scoreBoard.boards.get(target.getUniqueId()));
+                                    scoreBoard.updateBoard(scoreBoard.boards.get(target.getUniqueId()));
                                 }
 
                                 lobby.getRankManager().setRank(target.getUniqueId(), rank);

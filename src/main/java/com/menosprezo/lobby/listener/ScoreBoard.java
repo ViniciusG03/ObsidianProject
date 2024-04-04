@@ -71,16 +71,19 @@ public class ScoreBoard implements Listener {
         );
 
         Team team = player.getScoreboard().getEntryTeam(player.getName());
+
         if (team != null) {
-            if (rank == Rank.DONO) {
-                team.setPrefix("§4§lDONO§4 ");
-                team.setDisplayName("§4§lDONO§4 ");
-            } else if (rank == Rank.ADMIN) {
-                team.setPrefix("§4§lADMIN§4 ");
-                team.setDisplayName("§4§lADMIN§4 ");
-            } else {
-                team.setPrefix("§7");
-                team.setDisplayName("§7");
+            if (team.hasEntry(player.getName())) {
+                if (rank == Rank.DONO) {
+                    team.setPrefix("§4§lDONO§4 ");
+                    team.setDisplayName("§4§lDONO§4 ");
+                } else if (rank == Rank.ADMIN) {
+                    team.setPrefix("§4§lADMIN§4 ");
+                    team.setDisplayName("§4§lADMIN§4 ");
+                } else if (rank == Rank.MEMBRO){
+                    team.setPrefix("§7");
+                    team.setDisplayName("§7");
+                }
             }
         }
     }
@@ -98,10 +101,10 @@ public class ScoreBoard implements Listener {
                 team = board.getPlayer().getScoreboard().registerNewTeam(teamName);
                 team.setPrefix("§4§lADMIN§4 ");
                 team.setDisplayName("§4§lADMIN§4 ");
-            } else {
+            } else if (rank == Rank.MEMBRO) {
                 team = board.getPlayer().getScoreboard().registerNewTeam(teamName);
-                team.setPrefix("");
-                team.setDisplayName("");
+                team.setPrefix("§7");
+                team.setDisplayName("§7");
             }
         }
 
