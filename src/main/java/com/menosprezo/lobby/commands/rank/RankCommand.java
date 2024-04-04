@@ -72,9 +72,13 @@ public class RankCommand implements CommandExecutor {
 
                                 lobby.getRankManager().setRank(target.getUniqueId(), rank);
 
-                                player.sendMessage("§a" + target.getName() + " teve seu rank alterado para: " + rank.getDisplay());
+                                player.sendMessage("§aVocê mudou seu rank para: " + rank.getDisplay());
+
                                 if (target.isOnline()) {
-                                    target.getPlayer().sendMessage("§a" + player.getName() + " §amudou seu rank para " + rank.getDisplay());
+                                    if(target != player) {
+                                        target.getPlayer().sendMessage("§a" + player.getName() + " §amudou seu rank para " + rank.getDisplay());
+                                    }
+
                                 }
                                 return false;
                             }

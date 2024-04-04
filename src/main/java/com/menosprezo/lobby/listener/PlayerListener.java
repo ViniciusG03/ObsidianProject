@@ -1,6 +1,7 @@
 package com.menosprezo.lobby.listener;
 
 import com.menosprezo.lobby.Lobby;
+import com.menosprezo.lobby.commands.rank.Rank;
 import com.menosprezo.lobby.commands.rank.RankManager;
 import com.menosprezo.lobby.database.ManagerDB;
 import net.minecraft.server.v1_8_R3.ChatMessage;
@@ -41,11 +42,11 @@ public class PlayerListener implements Listener {
 
         player.setGameMode(GameMode.ADVENTURE);
 
-        String rankDisplay = lobby.getRankManager().getRank(player.getUniqueId()).getDisplay();
+        Rank rank = lobby.getRankManager().getRank(player.getUniqueId());
         Location spawn = new Location(player.getWorld(), 44, 86, 32, 138, 1);
         player.teleport(spawn);
 
-        if (rankDisplay != "§7§lMEMBRO§7") {
+        if (rank != Rank.MEMBRO) {
             Location spawnVip = new Location(player.getWorld(), 44, 88, 32, 138, 1);
             player.teleport(spawnVip);
             player.setAllowFlight(true);

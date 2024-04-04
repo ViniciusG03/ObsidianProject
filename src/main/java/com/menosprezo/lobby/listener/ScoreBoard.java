@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class ScoreBoard implements Listener {
 
-    private Lobby lobby;
+    private final Lobby lobby;
 
     public Map<UUID, FastBoard> boards = new HashMap<>();
 
@@ -52,18 +52,17 @@ public class ScoreBoard implements Listener {
             team.removeEntry(player.getName());
         }
 
-        if (board != null) {
-            board.delete();
-        }
+        board.delete();
     }
 
     public void updateBoard(FastBoard board) {
         Player player = board.getPlayer();
         Rank rank = lobby.getRankManager().getRank(player.getUniqueId());
+        String rankDisplay = rank.getDisplay();
 
         board.updateLines(
                 "",
-                "§fRank: " + rank.getDisplay(),
+                "§fRank: " + rankDisplay,
                 "",
                 "§fLobby: §7#1",
                 "§fJogadores: §5" + lobby.getServer().getOnlinePlayers().size(),
