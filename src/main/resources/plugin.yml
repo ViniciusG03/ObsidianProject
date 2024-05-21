@@ -1,13 +1,19 @@
 name: lobby
-version: '${1.0}'
+version: '1.0'
 main: com.menosprezo.lobby.Lobby
-authors: [ Menosprezo ]
+authors: [Menosprezo]
 description: Lobby Plugin
 commands:
   rank:
+    description: Rank command
   build:
+    description: Build command
   gm:
+    description: Game mode command
+  npc:
+    description: NPC command
 permissions:
   lobby.build:
     default: op
 
+depend: [ProtocolLib]

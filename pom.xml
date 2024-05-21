@@ -57,7 +57,6 @@
                     <relocations>
                         <relocation>
                             <pattern>fr.mrmicky.fastboard</pattern>
-                            <!-- Replace 'com.yourpackage' with the package of your plugin ! -->
                             <shadedPattern>com.menosprezo.fastboard</shadedPattern>
                         </relocation>
                     </relocations>
@@ -73,13 +72,21 @@
     </build>
 
     <repositories>
+            <repository>
+                <id>sonatype</id>
+                <url>https://oss.sonatype.org/content/groups/public/</url>
+            </repository>
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
         <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
     </repositories>
 
@@ -106,7 +113,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version> <!-- Versão atualizada -->
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>5.1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

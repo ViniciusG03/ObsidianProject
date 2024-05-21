@@ -4,14 +4,14 @@ import com.menosprezo.lobby.Lobby;
 import com.menosprezo.lobby.commands.rank.Rank;
 import com.menosprezo.lobby.commands.rank.RankManager;
 import com.menosprezo.lobby.database.ManagerDB;
+import com.menosprezo.lobby.manager.NPCManager;
 import com.menosprezo.lobby.util.MojangAuthenticator;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.*;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,23 +28,38 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
 
 import java.lang.reflect.Field;
+import java.util.*;
 
 import static com.menosprezo.lobby.commands.build.Build.buildEnabled;
 
 public class PlayerListener implements Listener {
 
+    private Map<UUID, NPC> playerNPCMap;
     ManagerDB managerDB = new ManagerDB();
     RankManager rankManager = new RankManager();
     MojangAuthenticator mojangAuthenticator = new MojangAuthenticator();
     private Lobby lobby;
-
+    NPCManager npcManager = new NPCManager();
     public PlayerListener(Lobby lobby) {
         this.lobby = lobby;
     }
 
     @EventHandler
+    public void onNPCInteract(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked().getType() == EntityType.ARMOR_STAND) {
+            Player player = event.getPlayer();
+            if (event.getRightClicked().getCustomName() != null && event.getRightClicked().getCustomName().equals("MINIGAMES")) {
+                player.sendMessage("Você interagiu com o NPC!");
+                event.setCancelled(true); // Impede a ação padrão de interação com o NPC
+            }
+        }
+    }
+
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        npcManager.createNPC(player, "§3§lMINIGAMES", new Location(player.getWorld(), 0.70, 83.0, 5.30,-90,0));
 
         player.setGameMode(GameMode.ADVENTURE);
 
@@ -168,58 +184,6 @@ public class PlayerListener implements Listener {
     public void onBlockIgnite(BlockIgniteEvent event) {
         if (event.getCause() == BlockIgniteEvent.IgniteCause.LIGHTNING) {
             event.setCancelled(true);
-        }
-    }
-
-    public void setSkin(Player player, String skinValue, String skinSignature) {
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        EntityPlayer entityPlayer = craftPlayer.getHandle();
-        GameProfile gameProfile = entityPlayer.getProfile();
-
-        gameProfile.getProperties().removeAll("textures");
-        gameProfile.getProperties().put("textures", new Property("textures", skinValue, skinSignature));
-
-        sendUpdatePacket(craftPlayer);
-    }
-
-    private void sendUpdatePacket(CraftPlayer player) {
-        EntityPlayer entityPlayer = player.getHandle();
-
-        try {
-            Field field = EntityPlayer.class.getDeclaredField("playerConnection");
-            field.setAccessible(true);
-            Object playerConnection = field.get(entityPlayer);
-
-            playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, getSkinUpdatePacket(entityPlayer));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private Object getSkinUpdatePacket(EntityPlayer entityPlayer) {
-        try {
-            Class<?> packetClass = getNMSClass("PacketPlayOutPlayerInfo");
-            Class<?> enumClass = getNMSClass("EnumPlayerInfoAction");
-
-            Object removeInfoPacket = packetClass.getConstructor(enumClass, entityPlayer.getClass()).newInstance(enumClass.getField("REMOVE_PLAYER").get(null), entityPlayer);
-
-            Object addInfoPacket = packetClass.getConstructor(enumClass, entityPlayer.getClass()).newInstance(enumClass.getField("ADD_PLAYER").get(null), entityPlayer);
-
-            return removeInfoPacket;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private Class<?> getNMSClass(String name) {
-        String version = org.bukkit.Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        try {
-            return Class.forName("net.minecraft.server." + version + "." + name);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
